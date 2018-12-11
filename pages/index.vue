@@ -1,42 +1,58 @@
 <template>
   <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        december
-      </h1>
-      <h2 class="subtitle">
-        My good Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
+    <div v-for="(v, index) in post.data" :key="index">
+      <nuxt-link :to="v.link">
+        <div class="eyecatch">
+          <img :src="v.jetpack_featured_media_url" alt>
+        </div>
+        <div>{{ v.id }}</div>
+        <div>{{ v.date }}</div>
+        <div>{{ v.title.rendered }}</div>
+      </nuxt-link>
     </div>
   </section>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue'
-
+import axios from 'axios'
 export default {
   components: {
     Logo
+  },
+
+  data() {
+    return {
+      post: ''
+    }
+  },
+
+  async mounted() {
+    console.log(this)
+    this.post = await axios.get(
+      'http://nayucolony.xsrv.jp/wp-json/wp/v2/posts?_embed',
+      {
+        // headers: {
+        //   'Access-Control-Arrow-Origin': '*'
+        // }
+      }
+    )
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.eyecatch {
+  width: 100%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
 
 .container {
-  min-height: 100vh;
-  display: flex;
+  max-width: 700px;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   text-align: center;
